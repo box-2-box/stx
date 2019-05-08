@@ -41,7 +41,7 @@ let database = new Sequelize({
 
 // Define our Post model
 // id, createdAt, and updatedAt are added by sequelize automatically
-let Post = database.define('transaction', {
+let Transaction = database.define('transaction', {
   action: Sequelize.INTEGER,
   date: Sequelize.TEXT,
   symbol: Sequelize.TEXT,
