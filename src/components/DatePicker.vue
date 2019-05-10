@@ -86,9 +86,9 @@ export default {
   name: 'DatePicker',
   props: {
     date: String,
-    disabled: Boolean,
+    disabled: Boolean
   },
-  data() {
+  data () {
     return {
       visiblePicker: false,
       visibleDate: true,
@@ -105,26 +105,26 @@ export default {
     }
   },
   methods: {
-    viewPicker() {
+    viewPicker () {
       this.visiblePicker = !this.visiblePicker
     },
-    updateMonth(month) {
+    updateMonth (month) {
       this.viewMonth = month
       this.daysVisibleMonth = this.getSelectedDate()
       this.dayOfWeekVisibleMonth = this.getSelecetdDayOfWeek()
     },
-    updateYear() {
+    updateYear () {
       this.daysVisibleMonth = this.getSelectedDate()
       this.dayOfWeekVisibleMonth = this.getSelecetdDayOfWeek()
     },
-    getSelectedDate() {
-      return new Date(this.viewYear, this.viewMonth+1, 0).getDate()
+    getSelectedDate () {
+      return new Date(this.viewYear, this.viewMonth + 1, 0).getDate()
     },
-    getSelecetdDayOfWeek() {
+    getSelecetdDayOfWeek () {
       return new Date(this.viewYear, this.viewMonth, 1).getDay()
     },
-    nextMonth() {
-      if (this.viewMonth == 11) {
+    nextMonth () {
+      if (this.viewMonth === 11) {
         this.viewMonth = 0
         this.viewYear++
       } else {
@@ -133,8 +133,8 @@ export default {
       this.updateMonth(this.viewMonth)
       this.updateYear()
     },
-    prevMonth() {
-      if (this.viewMonth == 0) {
+    prevMonth () {
+      if (this.viewMonth === 0) {
         this.viewMonth = 11
         this.viewYear--
       } else {
@@ -143,54 +143,53 @@ export default {
       this.updateMonth(this.viewMonth)
       this.updateYear()
     },
-    viewMonths() {
+    viewMonths () {
       this.visibleMonth = true
       this.visibleDate = false
     },
-    selectMonth(month) {
+    selectMonth (month) {
       this.viewMonth = month
       this.updateMonth(this.viewMonth)
       this.visibleMonth = false
       this.visibleDate = true
     },
-    nextYear() {
+    nextYear () {
       this.updateYear(++this.viewYear)
     },
-    prevYear() {
+    prevYear () {
       this.updateYear(--this.viewYear)
     },
-    viewYears() {
+    viewYears () {
       this.visibleMonth = false
       this.visibleYear = true
     },
-    selectYear(year){
+    selectYear (year) {
       this.viewYear = year
       this.visibleMonth = true
       this.visibleYear = false
     },
-    pickDate(date) {
+    pickDate (date) {
       this.selectedMonth = this.viewMonth
       this.selectedYear = this.viewYear
-      this.selectedDate = date  
+      this.selectedDate = date
       this.visiblePicker = !this.visiblePicker
 
-      this.$emit('update-date', `${ this.selectedMonth +1 }/${ this.selectedDate }/${ this.selectedYear }`)
+      this.$emit('update-date', `${this.selectedMonth + 1}/${this.selectedDate}/${this.selectedYear}`)
     },
-    selectedDateString() {
-      let d = new Date(this.selectedYear, this.selectedMonth, this.selectedDate) 
+    selectedDateString () {
+      let d = new Date(this.selectedYear, this.selectedMonth, this.selectedDate)
       let options = {weekday: 'short', month: 'short', day: 'numeric'}
       return d.toLocaleDateString('en-US', options)
     }
   },
-  created() {
-
-    if (this.date.length == 0) {
+  created () {
+    if (this.date === undefined || this.date.length === 0) {
       let now = new Date(Date.now())
       this.selectedYear = this.viewYear = now.getFullYear()
       this.selectedMonth = this.viewMonth = now.getMonth()
       this.selectedDate = now.getDate()
 
-      this.$emit('update-date', `${ this.selectedMonth +1 }/${ this.selectedDate }/${ this.selectedYear }`)
+      this.$emit('update-date', `${this.selectedMonth + 1}/${this.selectedDate}/${this.selectedYear}`)
     }
 
     this.daysVisibleMonth = this.getSelectedDate()

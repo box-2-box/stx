@@ -8,7 +8,7 @@ const client = axios.create({
 })
 
 export default {
-  async execute(method, resource, data) {
+  async execute (method, resource, data) {
     // inject the accessToken for each request
     let accessToken = await Vue.prototype.$auth.getAccessToken()
     return client({
@@ -22,19 +22,19 @@ export default {
       return req.data
     })
   },
-  getTransactions() {
+  getTransactions () {
     return this.execute('get', '/transactions')
   },
-  getTransaction(id) {
+  getTransaction (id) {
     return this.execute('get', `/transactions/${id}`)
   },
-  createTransaction(data) {
+  createTransaction (data) {
     return this.execute('post', '/transactions', data)
   },
-  updateTransaction(id, data) {
+  updateTransaction (id, data) {
     return this.execute('put', `/transactions/${id}`, data)
   },
-  deleteTransaction(id) {
+  deleteTransaction (id) {
     return this.execute('delete', `/transactions/${id}`)
   }
 }

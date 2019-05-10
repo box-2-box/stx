@@ -1,8 +1,13 @@
 <template>
   <tr>
     <td>
+      <input
+        disabled="disabled"
+        v-model="stock.id">
+    </td>
+    <td>
       <select v-model="stock.action" v-bind:disabled="!isEditMode">
-        <option value="">Select...</option>
+        <option value="0">Select...</option>
         <option value="1">Buy</option>
         <option value="2">Sell</option>
       </select>  
@@ -34,8 +39,13 @@
     <td>{{ value }}</td>
     <td>
       <button 
-        v-on:click="isEditMode = !isEditMode"
-      >{{butText}}</button>
+        v-if="!isEditMode"
+        @click="isEditMode = true"
+      >Edit</button>
+      <button 
+        v-if="isEditMode"
+        @click="saveRow"
+      >Save</button>
     </td>
     <td>
       <button 
@@ -46,41 +56,41 @@
 </template>
 
 <script>
-  import DatePicker from './DatePicker.vue'
+import DatePicker from './DatePicker.vue'
 
-  export default {
-    name: 'stx-row',
-    props: {
-      stock: Object,
+export default {
+  name: 'stx-row',
+  props: {
+    stock: Object
+  },
+  components: {
+    'date-picker': DatePicker
+  },
+  data () {
+    return {
+      isEditMode: false
+    }
+  },
+  computed: {
+    butText () {
+      return this.isEditMode ? 'Save' : 'Edit'
     },
-    components: {
-      'date-picker': DatePicker,
+    value () {
+      let n = this.stock.price * this.stock.shares
+      return n.toLocaleString('en', { style: 'currency', currency: 'USD' })
+    }
+  },
+  methods: {
+    saveRow () {
+      this.isEditMode = false
+      this.$emit('save-transaction')
     },
-    data() {
-      return {
-        isEditMode: false
-      }
+    deleteRow () {
+      this.$emit('delete-transaction')
     },
-    computed: {
-      butText() {
-        return this.isEditMode ? 'Done' : 'Edit'
-      },
-      value() { 
-        let n = this.stock.price * this.stock.shares
-        return n.toLocaleString('en', { style: 'currency', currency: 'USD' })
-      }
-    },  
-    methods: {
-      saveRow() {
-        this.isEditMode = false
-      },
-      deleteRow() {
-        this.$emit('delete-row')
-      },
-      onUpdateDate(date) {
-        this.stock.date = date
-      }
+    onUpdateDate (date) {
+      this.stock.date = date
     }
   }
-  
+}
 </script>

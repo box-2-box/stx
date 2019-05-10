@@ -6,15 +6,16 @@
         <th 
           v-for="(key, index) in model" 
           v-bind:key="index"
-        >{{ key }}</th>
+        >{{ index }}</th>
       </tr>
       <stx-transaction 
         v-for="(transaction, index) in transactions" 
         v-bind:key="index" 
         v-bind:stock="transaction"
-        @delete-row="onDeleteRow(index)" />
+        @delete-transaction="onDeleteTransaction(index)"
+        @save-transaction="onSaveTransaction(index)" />
     </table>
-    <button v-on:click="addRow">Add Row</button>
+    <button @click="addRow">Add Row</button>
   </div>
 </template>
 
@@ -27,52 +28,48 @@ export default {
     return {
       loading: false,
       transactions: [],
-      model: {}
+      model: {
+        'id': '',
+        'transaction': '0',
+        'date': '',
+        'symbol': '',
+        'price': '',
+        'shares': '',
+        'total': ''
+      }
     }
   },
   components: {
-    'stx-transaction': Transaction,
+    'stx-transaction': Transaction
   },
   async created () {
-    this.refreshPosts()
+    this.refreshTransactions()
   },
   methods: {
     async refreshTransactions () {
       this.loading = true
-      this.posts = await api.getTransactions()
+      this.transactions = await api.getTransactions()
       this.loading = false
     },
-    async saveTransaction () {
-      // if (this.model.id) {
-      //   await api.updatePost(this.model.id, this.model)
-      // } else {
-      //   await api.createPost(this.model)
-      // }
-      // this.model = {} // reset form
-      // await this.refreshPosts()
+    async onSaveTransaction (index) {
+      if (this.transactions[index].id) {
+        await api.updateTransaction(this.transactions[index].id, this.transactions[index])
+      } else {
+        await api.createTransaction(this.transactions[index])
+      }
+      await this.refreshTransactions()
     },
-    async deleteTransaction (id) {
-      // if (confirm('Are you sure you want to delete this post?')) {
-      //   // if we are editing a post we deleted, remove it from the form
-      //   if (this.model.id === id) {
-      //     this.model = {}
-      //   }
-      //   await api.deletePost(id)
-      //   await this.refreshPosts()
-      // }
+    async onDeleteTransaction (index) {
+      if (confirm('Are you sure you want to delete this transaction?')) {
+        if (this.transactions[index].id) {
+          await api.deleteTransaction(this.transactions[index].id)
+          await this.refreshTransactions()
+        }
+        this.transactions.splice(index, 1)
+      }
     },
-
-    addRow() {
-      let tmp = {}
-      let keys = Object.keys(this.stx[0])
-      keys.forEach(function(key) {
-        tmp[key] = ''
-      })
-
-      this.stx.push(tmp)
-    },
-    onDeleteRow(index) {
-      this.stx.splice(index, 1)
+    addRow () {
+      this.transactions.push(this.model)
     }
   }
 }
@@ -82,6 +79,7 @@ export default {
 th {
   background-color: #ddd;
   font-weight: bold;
+  text-transform: capitalize;
 }
 td {
   border: solid 1px #ddd
