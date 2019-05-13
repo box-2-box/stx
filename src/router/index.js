@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Transactions from '@/components/Transactions'
-import Edit from '@/components/EditTransaction'
+import Edit from '@/components/Transaction'
 import Auth from '@okta/okta-vue'
 
 Vue.use(Auth, {
@@ -19,7 +19,7 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'home',
       component: Home
     },
     {
@@ -28,15 +28,23 @@ let router = new Router({
     },
     {
       path: '/transactions',
-      name: 'Transactions',
+      name: 'transactions',
       component: Transactions,
       meta: {
         requiresAuth: true
       }
     },
     {
+      path: '/transaction/',
+      name: 'add',
+      component: Edit,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/transaction/:id',
-      name: 'Edit',
+      name: 'edit',
       component: Edit,
       meta: {
         requiresAuth: true

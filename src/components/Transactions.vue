@@ -3,49 +3,50 @@
     <h1>Transactions</h1>
     <table>
       <tr>
-        <th 
-          v-for="(key, index) in model" 
-          v-bind:key="index"
-        >{{ index }}</th>
+        <th>Date</th>
+        <th>Action</th>
+        <th>Symbol</th>
+        <th>Shares</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th></th>
       </tr>
-      <stx-transaction 
+      <tr
         v-for="(transaction, index) in transactions" 
-        v-bind:key="index" 
-        v-bind:stock="transaction"
-        @delete-transaction="onDeleteTransaction(index)"
-        @save-transaction="onSaveTransaction(index)" />
+        :key="index"
+      >
+        <td>{{ transaction.date }}</td>
+        <td>{{ actions[transaction.action] }}</td>
+        <td>{{ transaction.symbol }}</td>
+        <td>{{ transaction.shares }}</td>
+        <td>{{ transaction.price }}</td>
+        <td>{{ value(transaction.shares, transaction.price) }}</td>
+        <td><router-link :to="{name: 'edit', params: {id: index}}">Edit</router-link></td>
+      </tr>
     </table>
-    <button @click="addRow">Add Row</button>
+    <router-link to="/transaction">New Transaction</router-link>
   </div>
 </template>
 
 <script>
 import api from '@/api'
-import Transaction from './Transaction.vue'
 
 export default {
   data () {
     return {
       loading: false,
       transactions: [],
-      model: {
-        'id': '',
-        'action': '0',
-        'date': '',
-        'symbol': '',
-        'price': '',
-        'shares': '',
-        'total': ''
-      }
+      actions: ['Buy', 'Sell', 'Dividend', 'Reinvest']
     }
-  },
-  components: {
-    'stx-transaction': Transaction
   },
   async created () {
     this.refreshTransactions()
   },
   methods: {
+    value (shares, price) {
+      let n = price * shares
+      return n.toLocaleString('en', { style: 'currency', currency: 'USD' })
+    },
     async refreshTransactions () {
       this.loading = true
       this.transactions = await api.getTransactions()
@@ -68,8 +69,8 @@ export default {
         this.transactions.splice(index, 1)
       }
     },
-    addRow () {
-      this.transactions.push(this.model)
+    onUpdateDate (index, date) {
+      this.transactions[index].date = date
     }
   }
 }
