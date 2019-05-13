@@ -30,7 +30,7 @@ export default {
       transactions: [],
       model: {
         'id': '',
-        'transaction': '0',
+        'action': '0',
         'date': '',
         'symbol': '',
         'price': '',

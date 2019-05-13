@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <header>
-      <nav>
-        <span>STX</span>
-        <nav-item><router-link to="/">Home</router-link></nav-item>
-        <nav-item><router-link to="/transactions">Transactions</router-link></nav-item>
-        <nav-item href="#" @click.prevent="login" v-if="!activeUser">Login</nav-item>
-        <nav-item href="#" @click.prevent="logout" v-else>Logout</nav-item>
-      </nav>
-    </header>
+    <b-navbar toggleable="md" type="dark" variant="dark">
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-navbar-brand to="/">STX</b-navbar-brand>
+      <b-collapse is-nav id="nav_collapse">
+        <b-navbar-nav>
+          <b-nav-item to="/">Home</b-nav-item>
+          <b-nav-item to="/transactions">Transactions</b-nav-item>
+          <b-nav-item href="#" @click.prevent="login" v-if="!activeUser">Login</b-nav-item>
+          <b-nav-item href="#" @click.prevent="logout" v-else>Logout</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
     <main>
-      <router-view></router-view>
+      <router-view v-bind:user="activeUser"></router-view>
     </main>
   </div>
 </template>
@@ -67,7 +70,7 @@ header {
   margin: 0;
   height: 56px;
   padding: 0 16px 0 24px;
-  background-color: #35495E;
+  /* background-color: #35495E; */
   color: #ffffff;
 }
 

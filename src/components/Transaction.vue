@@ -10,6 +10,8 @@
         <option value="0">Select...</option>
         <option value="1">Buy</option>
         <option value="2">Sell</option>
+        <option value="3">Dividend</option>
+        <option value="4">Reinvest</option>
       </select>  
     </td>
     <td>
