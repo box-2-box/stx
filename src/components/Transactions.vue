@@ -21,7 +21,7 @@
         <td>{{ transaction.shares }}</td>
         <td>{{ transaction.price }}</td>
         <td>{{ value(transaction.shares, transaction.price) }}</td>
-        <td><router-link :to="{name: 'edit', params: {id: index}}">Edit</router-link></td>
+        <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
       </tr>
     </table>
     <router-link to="/transaction">New Transaction</router-link>
