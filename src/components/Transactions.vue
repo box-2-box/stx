@@ -36,7 +36,7 @@ export default {
     return {
       loading: false,
       transactions: [],
-      actions: ['Buy', 'Sell', 'Dividend', 'Reinvest']
+      actions: ['', 'Buy', 'Dividend', 'Reinvest']
     }
   },
   async created () {
@@ -51,23 +51,6 @@ export default {
       this.loading = true
       this.transactions = await api.getTransactions()
       this.loading = false
-    },
-    async onSaveTransaction (index) {
-      if (this.transactions[index].id) {
-        await api.updateTransaction(this.transactions[index].id, this.transactions[index])
-      } else {
-        await api.createTransaction(this.transactions[index])
-      }
-      await this.refreshTransactions()
-    },
-    async onDeleteTransaction (index) {
-      if (confirm('Are you sure you want to delete this transaction?')) {
-        if (this.transactions[index].id) {
-          await api.deleteTransaction(this.transactions[index].id)
-          await this.refreshTransactions()
-        }
-        this.transactions.splice(index, 1)
-      }
     },
     onUpdateDate (index, date) {
       this.transactions[index].date = date

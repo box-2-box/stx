@@ -9,7 +9,7 @@
         <div v-if="visibleYear" class="years"> 
           <button
             v-for="(n, index) in 10" 
-            v-on:click="selectYear(n + viewYear-5)"
+            v-on:click.prevent="selectYear(n + viewYear-5)"
             v-bind:key="index"
             v-bind:value="n + viewYear-5"
             v-bind:class="(n + viewYear-5) == selectedYear ? 'active' : ''"

@@ -25,6 +25,10 @@
       <div>Shares</div>
       <input v-model="transaction.shares" type="text" class="form-control">
     </div>
+    <div class="form-group">
+      <div>Price</div>
+      <input v-model="transaction.price" type="text" class="form-control">
+    </div>
     <button @click.prevent="saveTransaction" class="btn btn-primary btn-lg btn-block">Save</button>
     <button 
       class="btn btn-secondary btn-lg btn-block"
@@ -67,9 +71,21 @@ export default {
     },
     onUpdateDate () {
     },
-    saveTransaction () {
+    async saveTransaction () {
+      if (this.id) {
+        await api.updateTransaction(this.id, this.transaction)
+      } else {
+        await api.createTransaction(this.transaction)
+      }
+      this.$router.push('/transactions')
     },
-    deleteTransaction () {
+    async deleteTransaction () {
+      if (confirm('Are you sure you want to delete this transaction?')) {
+        if (this.id) {
+          await api.deleteTransaction(this.id)
+        }
+        this.$router.push('/transactions')
+      }
     }
   }
 }
