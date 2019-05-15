@@ -5,8 +5,9 @@
     <div class="form-group">
       <label>Date</label>
       <date-picker 
-          v-bind:date="transaction.date"
-          v-on:update-date="onUpdateDate" />
+        v-if="componentLoaded"
+        :date="transaction.date"
+        v-on:update-date="onUpdateDate" />
     </div>
     <div class="form-group">
       <label>Action</label>
@@ -52,16 +53,23 @@ export default {
     return {
       id: this.$route.params.id,
       transaction: {},
-      loading: false
+      loading: false,
+      componentLoaded: false
     }
   },
   components: {
     'date-picker': DatePicker
   },
-  async created () {
+  created () {
     if (this.id !== undefined) {
       this.getTransaction()
+        .then(() => {
+          this.componentLoaded = true
+        })
     }
+  },
+  mounted () {
+    this.componentLoaded = true
   },
   methods: {
     async getTransaction () {
@@ -69,7 +77,9 @@ export default {
       this.transaction = await api.getTransaction(this.id)
       this.loading = false
     },
-    onUpdateDate () {
+    onUpdateDate (date) {
+      console.log(date)
+      this.transaction.date = date
     },
     async saveTransaction () {
       if (this.id) {

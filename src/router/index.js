@@ -46,6 +46,7 @@ let router = new Router({
       path: '/transaction/:id',
       name: 'edit',
       component: Edit,
+      props: true,
       meta: {
         requiresAuth: true
       }

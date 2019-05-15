@@ -18,13 +18,13 @@
         <div v-if="visibleMonth">
           <div class="year-nav">
             <div>
-              <button v-on:click="prevYear">&lt;</button>
+              <button v-on:click.prevent="prevYear">&lt;</button>
             </div>
             <div
               class="current-year"
-              v-on:click="viewYears">{{ viewYear }}</div>
+              v-on:click.prevent="viewYears">{{ viewYear }}</div>
             <div>
-              <button v-on:click="nextYear">&gt;</button>
+              <button v-on:click.prevent="nextYear">&gt;</button>
             </div>
           </div>
           <div class="months">
@@ -32,20 +32,20 @@
               v-for="(month, index) in months" 
               v-bind:key="index" 
               v-bind:class="index == viewMonth && selectedYear == viewYear ? 'active' : ''"
-              v-on:click="selectMonth(index)"
+              v-on:click.prevent="selectMonth(index)"
             >{{ month.substring(0,3) }}</button>
           </div>
         </div>
         <div v-if="visibleDate">
           <div class="month-nav">
             <div>
-              <button v-on:click="prevMonth">&lt;</button>
+              <button v-on:click.prevent="prevMonth">&lt;</button>
             </div>
             <div
               class="current-month"
-              v-on:click="viewMonths">{{ months[viewMonth] }} {{ viewYear }}</div>
+              v-on:click.prevent="viewMonths">{{ months[viewMonth] }} {{ viewYear }}</div>
             <div>  
-              <button v-on:click="nextMonth">&gt;</button>
+              <button v-on:click.prevent="nextMonth">&gt;</button>
             </div>
           </div>
           <div class="calendar">
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <button v-on:click="viewPicker" v-bind:disabled="disabled">
+    <button v-on:click.prevent="viewPicker">
         {{ selectedMonth +1 }}/{{ selectedDate }}/{{ selectedYear }}
       </button>
   </div>
@@ -85,8 +85,7 @@
 export default {
   name: 'DatePicker',
   props: {
-    date: String,
-    disabled: Boolean
+    date: String
   },
   data () {
     return {
@@ -103,6 +102,19 @@ export default {
       viewMonth: new Date(this.date).getMonth(),
       viewYear: new Date(this.date).getFullYear()
     }
+  },
+  created () {
+    if (this.date === undefined || this.date === null || this.date.length === 0) {
+      let now = new Date(Date.now())
+      this.selectedYear = this.viewYear = now.getFullYear()
+      this.selectedMonth = this.viewMonth = now.getMonth()
+      this.selectedDate = now.getDate()
+
+      this.$emit('update-date', `${this.selectedMonth + 1}/${this.selectedDate}/${this.selectedYear}`)
+    }
+
+    this.daysVisibleMonth = this.getSelectedDate()
+    this.dayOfWeekVisibleMonth = this.getSelecetdDayOfWeek()
   },
   methods: {
     viewPicker () {
@@ -181,19 +193,6 @@ export default {
       let options = {weekday: 'short', month: 'short', day: 'numeric'}
       return d.toLocaleDateString('en-US', options)
     }
-  },
-  created () {
-    if (this.date === undefined || this.date.length === 0) {
-      let now = new Date(Date.now())
-      this.selectedYear = this.viewYear = now.getFullYear()
-      this.selectedMonth = this.viewMonth = now.getMonth()
-      this.selectedDate = now.getDate()
-
-      this.$emit('update-date', `${this.selectedMonth + 1}/${this.selectedDate}/${this.selectedYear}`)
-    }
-
-    this.daysVisibleMonth = this.getSelectedDate()
-    this.dayOfWeekVisibleMonth = this.getSelecetdDayOfWeek()
   }
 }
 </script>

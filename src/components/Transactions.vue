@@ -51,9 +51,6 @@ export default {
       this.loading = true
       this.transactions = await api.getTransactions()
       this.loading = false
-    },
-    onUpdateDate (index, date) {
-      this.transactions[index].date = date
     }
   }
 }
