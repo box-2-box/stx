@@ -117,6 +117,9 @@ export default {
     this.dayOfWeekVisibleMonth = this.getSelecetdDayOfWeek()
   },
   methods: {
+    initDate () {
+
+    },
     viewPicker () {
       this.visiblePicker = !this.visiblePicker
     },

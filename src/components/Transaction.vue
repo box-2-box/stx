@@ -5,7 +5,7 @@
     <div class="form-group">
       <label>Date</label>
       <date-picker 
-        v-if="componentLoaded"
+        v-if="transaction.date"
         :date="transaction.date"
         v-on:update-date="onUpdateDate" />
     </div>
@@ -53,8 +53,7 @@ export default {
     return {
       id: this.$route.params.id,
       transaction: {},
-      loading: false,
-      componentLoaded: false
+      loading: false
     }
   },
   components: {
@@ -63,9 +62,6 @@ export default {
   created () {
     if (this.id !== undefined) {
       this.getTransaction()
-        .then(() => {
-          this.componentLoaded = true
-        })
     }
   },
   mounted () {
