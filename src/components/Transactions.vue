@@ -1,32 +1,36 @@
 <template>
   <div>
     <h1>Transactions</h1>
-    <table>
-      <tr>
-        <th>Date</th>
-        <th>Action</th>
-        <th>Symbol</th>
-        <th>Shares</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-      <tr
-        v-for="(transaction, index) in transactions" 
-        :key="index"
-      >
-        <td>{{ transaction.date }}</td>
-        <td>{{ actions[transaction.action] }}</td>
-        <td>{{ transaction.symbol }}</td>
-        <td>{{ transaction.shares }}</td>
-        <td>{{ transaction.price }}</td>
-        <td>{{ value(transaction.shares, transaction.price) }}</td>
-        <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
-        <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
-        <td><a href="#" @click="deleteTransaction">Delete</a></td>
-      </tr>
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Action</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Shares</th>
+          <th scope="col">Price</th>
+          <th scope="col">Total</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(transaction, index) in transactions" 
+          :key="index"
+        >
+          <td>{{ transaction.date }}</td>
+          <td>{{ actions[transaction.action] }}</td>
+          <td>{{ transaction.symbol }}</td>
+          <td>{{ transaction.shares }}</td>
+          <td>{{ transaction.price }}</td>
+          <td>{{ value(transaction.shares, transaction.price) }}</td>
+          <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
+          <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
+          <td><a href="#" @click="deleteTransaction">Delete</a></td>
+        </tr>
+      </tbody>
     </table>
     <router-link to="/transaction/add">New Transaction</router-link>
   </div>
@@ -40,7 +44,7 @@ export default {
     return {
       loading: false,
       transactions: [],
-      actions: ['', 'Buy', 'Dividend', 'Reinvest']
+      actions: ['', 'Buy', 'Dividend', 'Reinvest', 'Sell']
     }
   },
   async created () {
@@ -67,12 +71,5 @@ export default {
 </script>
 
 <style scoped>
-th {
-  background-color: #ddd;
-  font-weight: bold;
-  text-transform: capitalize;
-}
-td {
-  border: solid 1px #ddd
-}
+
 </style>
