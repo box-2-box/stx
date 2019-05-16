@@ -1,11 +1,12 @@
 <template>
   <form>
-    <h1 v-if="id">Edit Transaction</h1>
-    <h1 v-else>Add Transaction</h1>
+    <h1 v-if="transactionType === 'edit'">Edit Transaction</h1>
+    <h1 v-if="transactionType === 'add'">Add Transaction</h1>
+    <h1 v-if="transactionType === 'sell'">Sell Holding</h1>
     <div class="form-group">
       <label>Date</label>
       <date-picker 
-        v-if="transaction.date"
+        v-if="dataLoaded"
         :date="transaction.date"
         v-on:update-date="onUpdateDate" />
     </div>
@@ -13,34 +14,36 @@
       <label>Action</label>
       <select class="form-control" v-model="transaction.action">
         <option value="">Select...</option>
-        <option value="1">Buy</option>
-        <option value="2">Dividend</option>
-        <option value="3">Reinvest</option>
+        <option v-if="transactionType !== 'sell'" value="1">Buy</option>
+        <option v-if="transactionType !== 'sell'" value="2">Dividend</option>
+        <option v-if="transactionType !== 'sell'" value="3">Reinvest</option>
+        <option v-if="transactionType === 'sell'" value="4">Sell</option>
       </select>
+      
     </div>
     <div class="form-group">
       <label>Symbol</label>
       <input v-model="transaction.symbol" type="text" class="form-control">
     </div>
     <div class="form-group">
-      <div>Shares</div>
-      <input v-model="transaction.shares" type="text" class="form-control">
+      <label>Shares</label>
+      <input v-if="transactionType === 'sell'" v-model="transaction.shares" type="number" min="1" max="transation.shares" class="form-control">
+      <input v-else v-model="transaction.shares" type="number" min="1" class="form-control">
     </div>
     <div class="form-group">
-      <div>Price</div>
-      <input v-model="transaction.price" type="text" class="form-control">
+      <label>Price</label>
+      <input v-model="transaction.price" type="number" class="form-control">
     </div>
     <button @click.prevent="saveTransaction" class="btn btn-primary btn-lg btn-block">Save</button>
     <button 
       class="btn btn-secondary btn-lg btn-block"
-      @click.prevent="deleteTransaction" 
-      v-if="id"
-    >Delete</button>
-    <button 
-      class="btn btn-secondary btn-lg btn-block"
-      @click.prevent="$router.push('/transactions')" 
-      v-else
+      @click.prevent="$router.push('/transactions')"
     >Cancel</button>
+    <button 
+      v-if="transactionType === 'edit'"
+      class="btn btn-secondary btn-lg btn-block"
+      @click.prevent="deleteTransaction"
+    >Delete</button>
   </form>
 </template>
 
@@ -52,20 +55,27 @@ export default {
   data () {
     return {
       id: this.$route.params.id,
+      transactionType: this.$attrs.transactionType,
       transaction: {},
-      loading: false
+      loading: false,
+      dataLoaded: false,
+      sharesRemaining: null
     }
   },
   components: {
     'date-picker': DatePicker
   },
-  created () {
-    if (this.id !== undefined) {
-      this.getTransaction()
+  async created () {
+    if (this.transactionType === 'edit') {
+      await this.getTransaction()
+    } else if (this.transactionType === 'sell') {
+      await this.getTransaction()
+      this.transaction.date = ''
+      this.transaction.action = 4
+      this.transaction.shares = ''
+      this.transaction.price = ''
     }
-  },
-  mounted () {
-    this.componentLoaded = true
+    this.dataLoaded = true
   },
   methods: {
     async getTransaction () {

@@ -10,6 +10,7 @@
         <th>Price</th>
         <th>Total</th>
         <th></th>
+        <th></th>
       </tr>
       <tr
         v-for="(transaction, index) in transactions" 
@@ -22,9 +23,10 @@
         <td>{{ transaction.price }}</td>
         <td>{{ value(transaction.shares, transaction.price) }}</td>
         <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
+        <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
       </tr>
     </table>
-    <router-link to="/transaction">New Transaction</router-link>
+    <router-link to="/transaction/add">New Transaction</router-link>
   </div>
 </template>
 
