@@ -22,9 +22,9 @@
         >
           <td>{{ transaction.date }}</td>
           <td>{{ actions[transaction.action] }}</td>
-          <td>{{ transaction.symbol }}</td>
+          <td class="text-uppercase">{{ transaction.symbol }}</td>
           <td>{{ transaction.shares }}</td>
-          <td>{{ transaction.price }}</td>
+          <td>{{ value(1, transaction.price) }}</td>
           <td>{{ value(transaction.shares, transaction.price) }}</td>
           <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
           <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
@@ -38,6 +38,7 @@
 
 <script>
 import api from '@/api'
+import helpers from '@/helpers'
 
 export default {
   data () {
@@ -52,8 +53,7 @@ export default {
   },
   methods: {
     value (shares, price) {
-      let n = price * shares
-      return n.toLocaleString('en', { style: 'currency', currency: 'USD' })
+      return helpers.toCurrency(shares * price)
     },
     async refreshTransactions () {
       this.loading = true

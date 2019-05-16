@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
       <label>Shares</label>
-      <input v-if="transactionType === 'sell'" v-model="transaction.shares" type="number" min="1" max="transation.shares" class="form-control">
+      <input v-if="transactionType === 'sell'" v-model="transaction.shares" type="number" min="1" :max="transaction.shares" class="form-control">
       <input v-else v-model="transaction.shares" type="number" min="1" class="form-control">
     </div>
     <div class="form-group">
@@ -67,7 +67,6 @@ export default {
       await this.getTransaction()
       this.transaction.date = ''
       this.transaction.action = 4
-      this.transaction.shares = ''
       this.transaction.price = ''
     }
     this.dataLoaded = true
