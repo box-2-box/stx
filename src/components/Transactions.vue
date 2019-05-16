@@ -11,6 +11,7 @@
         <th>Total</th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
       <tr
         v-for="(transaction, index) in transactions" 
@@ -22,8 +23,9 @@
         <td>{{ transaction.shares }}</td>
         <td>{{ transaction.price }}</td>
         <td>{{ value(transaction.shares, transaction.price) }}</td>
-        <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
         <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
+        <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
+        <td><a href="#" @click="deleteTransaction">Delete</a></td>
       </tr>
     </table>
     <router-link to="/transaction/add">New Transaction</router-link>
@@ -53,6 +55,12 @@ export default {
       this.loading = true
       this.transactions = await api.getTransactions()
       this.loading = false
+    },
+    async deleteTransaction () {
+      if (confirm('Are you sure you want to delete this transaction?')) {
+        await api.deleteTransaction(this.id)
+        this.refreshTransactions()
+      }
     }
   }
 }

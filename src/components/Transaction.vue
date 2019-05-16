@@ -39,11 +39,6 @@
       class="btn btn-secondary btn-lg btn-block"
       @click.prevent="$router.push('/transactions')"
     >Cancel</button>
-    <button 
-      v-if="transactionType === 'edit'"
-      class="btn btn-secondary btn-lg btn-block"
-      @click.prevent="deleteTransaction"
-    >Delete</button>
   </form>
 </template>
 
@@ -94,14 +89,6 @@ export default {
         await api.createTransaction(this.transaction)
       }
       this.$router.push('/transactions')
-    },
-    async deleteTransaction () {
-      if (confirm('Are you sure you want to delete this transaction?')) {
-        if (this.id) {
-          await api.deleteTransaction(this.id)
-        }
-        this.$router.push('/transactions')
-      }
     }
   }
 }
