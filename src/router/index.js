@@ -27,7 +27,7 @@ let router = new Router({
       component: Auth.handleCallback()
     },
     {
-      path: '/transactions',
+      path: '/trades',
       name: 'transactions',
       component: Transactions,
       meta: {
@@ -35,7 +35,7 @@ let router = new Router({
       }
     },
     {
-      path: '/transaction/add',
+      path: '/trade/add',
       name: 'add',
       component: Transaction,
       props: { transactionType: 'add' },
@@ -44,7 +44,7 @@ let router = new Router({
       }
     },
     {
-      path: '/transaction/edit/:id',
+      path: '/trade/edit/:id',
       name: 'edit',
       component: Transaction,
       props: { transactionType: 'edit' },
@@ -53,7 +53,7 @@ let router = new Router({
       }
     },
     {
-      path: '/transaction/sell/:id',
+      path: '/trade/sell/:id',
       name: 'sell',
       component: Transaction,
       props: { transactionType: 'sell' },

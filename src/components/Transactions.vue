@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Transactions</h1>
+    <h1>Trades</h1>
     <table class="table">
       <thead class="thead-light">
         <tr>
@@ -28,13 +28,13 @@
           <td>{{ value(transaction.shares, transaction.price) }}</td>
           <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
           <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
-          <td><a href="#" @click="deleteTransaction">Delete</a></td>
+          <td><a href="#" @click="deleteTransaction(index)">Delete</a></td>
         </tr>
       </tbody>
     </table>
-    <router-link to="/transaction/add">New Transaction</router-link>
+    <router-link to="/trade/add"><button class="btn btn-primary btn-lg btn-block">New Trade</button></router-link>
   </div>
-</template>
+</template> 
 
 <script>
 import api from '@/api'
@@ -60,9 +60,9 @@ export default {
       this.transactions = await api.getTransactions()
       this.loading = false
     },
-    async deleteTransaction () {
+    async deleteTransaction (index) {
       if (confirm('Are you sure you want to delete this transaction?')) {
-        await api.deleteTransaction(this.id)
+        await api.deleteTransaction(this.transactions[index].id)
         this.refreshTransactions()
       }
     }

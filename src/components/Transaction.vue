@@ -1,7 +1,7 @@
 <template>
   <form>
-    <h1 v-if="transactionType === 'edit'">Edit Transaction</h1>
-    <h1 v-if="transactionType === 'add'">Add Transaction</h1>
+    <h1 v-if="transactionType === 'edit'">Edit Trade</h1>
+    <h1 v-if="transactionType === 'add'">Add Trade</h1>
     <h1 v-if="transactionType === 'sell'">Sell Holding</h1>
     <div class="form-group">
       <label>Date</label>
@@ -37,7 +37,7 @@
     <button @click.prevent="saveTransaction" class="btn btn-primary btn-lg btn-block">Save</button>
     <button 
       class="btn btn-secondary btn-lg btn-block"
-      @click.prevent="$router.push('/transactions')"
+      @click.prevent="$router.push('/trades')"
     >Cancel</button>
   </form>
 </template>
@@ -65,6 +65,7 @@ export default {
       await this.getTransaction()
     } else if (this.transactionType === 'sell') {
       await this.getTransaction()
+      this.transaction.id = ''
       this.transaction.date = ''
       this.transaction.action = 4
       this.transaction.price = ''
@@ -82,12 +83,12 @@ export default {
       this.transaction.date = date
     },
     async saveTransaction () {
-      if (this.id) {
+      if (this.transactionType === 'edit') {
         await api.updateTransaction(this.id, this.transaction)
       } else {
         await api.createTransaction(this.transaction)
       }
-      this.$router.push('/transactions')
+      this.$router.push('/trades')
     }
   }
 }
