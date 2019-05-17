@@ -22,18 +22,18 @@ export default {
     })
   },
   getTransactions () {
-    return this.execute('get', '/transactions')
+    return this.execute('get', '/trades')
   },
   getTransaction (id) {
-    return this.execute('get', `/transactions/${id}`)
+    return this.execute('get', `/trades/edit/${id}`)
   },
   createTransaction (data) {
-    return this.execute('post', '/transactions', data)
+    return this.execute('post', '/trades/add', data)
   },
   updateTransaction (id, data) {
-    return this.execute('put', `/transactions/${id}`, data)
+    return this.execute('put', `/trades/update/${id}`, data)
   },
   deleteTransaction (id) {
-    return this.execute('delete', `/transactions/${id}`)
+    return this.execute('delete', `/trades/delete/${id}`)
   }
 }

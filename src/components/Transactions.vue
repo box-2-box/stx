@@ -26,8 +26,8 @@
           <td>{{ transaction.shares }}</td>
           <td>{{ value(1, transaction.price) }}</td>
           <td>{{ value(transaction.shares, transaction.price) }}</td>
-          <td><router-link :to="{name: 'sell', params: {id: transaction.id}}">Sell</router-link></td>
-          <td><router-link :to="{name: 'edit', params: {id: transaction.id}}">Edit</router-link></td>
+          <td><router-link :to="{name: 'sell', params: {id: transaction._id}}">Sell</router-link></td>
+          <td><router-link :to="{name: 'edit', params: {id: transaction._id}}">Edit</router-link></td>
           <td><a href="#" @click="deleteTransaction(index)">Delete</a></td>
         </tr>
       </tbody>
@@ -62,7 +62,7 @@ export default {
     },
     async deleteTransaction (index) {
       if (confirm('Are you sure you want to delete this transaction?')) {
-        await api.deleteTransaction(this.transactions[index].id)
+        await api.deleteTransaction(this.transactions[index]._id)
         this.refreshTransactions()
       }
     }
