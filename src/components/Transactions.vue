@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Trades</h1>
+    <h1 class="float-left">Trades</h1>
+    <router-link to="/trade/add"><button class="btn btn-primary btn-lg float-right">New Trade</button></router-link>
     <table class="table">
       <thead class="thead-light">
         <tr>
@@ -34,7 +35,6 @@
         </tr>
       </tbody>
     </table>
-    <router-link to="/trade/add"><button class="btn btn-primary btn-lg btn-block">New Trade</button></router-link>
   </div>
 </template> 
 
