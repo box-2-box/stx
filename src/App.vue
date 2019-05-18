@@ -7,46 +7,17 @@
         <b-navbar-nav>
           <b-nav-item to="/">Home</b-nav-item>
           <b-nav-item to="/trades">Trades</b-nav-item>
-          <b-nav-item href="#" @click.prevent="login" v-if="!activeUser">Login</b-nav-item>
-          <b-nav-item href="#" @click.prevent="logout" v-else>Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <main>
-      <router-view v-bind:user="activeUser"></router-view>
+      <router-view></router-view>
     </main>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      activeUser: null
-    }
-  },
-  async created () {
-    await this.refreshActiveUser()
-  }
-  // watch: {
-  //   // everytime a route is changed refresh the activeUser
-  //   '$route': 'refreshActiveUser'
-  // },
-  // methods: {
-  //   login () {
-  //     this.$auth.loginRedirect()
-  //   },
-  //   // async refreshActiveUser () {
-  //   //   this.activeUser = await this.$auth.getUser()
-  //   // },
-  //   async logout () {
-  //     await this.$auth.logout()
-  //     await this.refreshActiveUser()
-  //     this.$router.push('/')
-  //   }
-  // }
-}
+
 </script>
 
 <style>
