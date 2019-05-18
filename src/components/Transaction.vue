@@ -65,10 +65,11 @@ export default {
       await this.getTransaction()
     } else if (this.transactionType === 'sell') {
       await this.getTransaction()
-      this.transaction.id = ''
+      this.transaction._id = ''
       this.transaction.date = ''
       this.transaction.action = 4
       this.transaction.price = ''
+      this.transaction.purchase_id = this.id
     }
     this.dataLoaded = true
   },
