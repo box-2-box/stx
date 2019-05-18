@@ -15,7 +15,9 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody
+        v-if="dataLoaded"
+      >  
         <tr
           v-for="(transaction, index) in transactions" 
           :key="index"
@@ -24,7 +26,7 @@
           <td>{{ actions[transaction.action] }}</td>
           <td class="text-uppercase">{{ transaction.symbol }}</td>
           <td>{{ transaction.shares }}</td>
-          <td>{{ value(1, transaction.price) }}</td>
+          <td>{{ transaction.price | asCurrency }}</td>
           <td>{{ value(transaction.shares, transaction.price) }}</td>
           <td><router-link :to="{name: 'sell', params: {id: transaction._id}}">Sell</router-link></td>
           <td><router-link :to="{name: 'edit', params: {id: transaction._id}}">Edit</router-link></td>
@@ -43,7 +45,7 @@ import helpers from '@/helpers'
 export default {
   data () {
     return {
-      loading: false,
+      dataLoaded: false,
       transactions: [],
       actions: ['', 'Buy', 'Dividend', 'Reinvest', 'Sell']
     }
@@ -51,14 +53,22 @@ export default {
   async created () {
     this.refreshTransactions()
   },
+  filters: {
+    asCurrency (value) {
+      if (value) {
+        let n = value.toLocaleString('en', { style: 'currency', currency: 'USD' })
+        console.log(n)
+        return n
+      }
+    }
+  },
   methods: {
     value (shares, price) {
       return helpers.toCurrency(shares * price)
     },
     async refreshTransactions () {
-      this.loading = true
       this.transactions = await api.getTransactions()
-      this.loading = false
+      this.dataLoaded = true
     },
     async deleteTransaction (index) {
       if (confirm('Are you sure you want to delete this transaction?')) {
