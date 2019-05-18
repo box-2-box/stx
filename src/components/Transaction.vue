@@ -79,7 +79,6 @@ export default {
       this.loading = false
     },
     onUpdateDate (date) {
-      console.log(date)
       this.transaction.date = date
     },
     async saveTransaction () {

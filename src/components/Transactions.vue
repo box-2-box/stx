@@ -26,8 +26,8 @@
           <td>{{ actions[transaction.action] }}</td>
           <td class="text-uppercase">{{ transaction.symbol }}</td>
           <td>{{ transaction.shares }}</td>
-          <td>{{ transaction.price | asCurrency }}</td>
-          <td>{{ value(transaction.shares, transaction.price) }}</td>
+          <td>{{ transaction.price | toFloat | toCurrency }}</td>
+          <td>{{ transaction.shares * transaction.price | toFloat | toCurrency   }}</td>
           <td><router-link :to="{name: 'sell', params: {id: transaction._id}}">Sell</router-link></td>
           <td><router-link :to="{name: 'edit', params: {id: transaction._id}}">Edit</router-link></td>
           <td><a href="#" @click="deleteTransaction(index)">Delete</a></td>
@@ -40,7 +40,6 @@
 
 <script>
 import api from '@/api'
-import helpers from '@/helpers'
 
 export default {
   data () {
@@ -54,17 +53,16 @@ export default {
     this.refreshTransactions()
   },
   filters: {
-    asCurrency (value) {
-      if (value) {
-        let n = value.toLocaleString('en', { style: 'currency', currency: 'USD' })
-        console.log(n)
-        return n
-      }
+    toFloat (value) {
+      if (value) return parseFloat(value)
+    },
+    toCurrency (value) {
+      if (value) return value.toLocaleString('en', { style: 'currency', currency: 'USD' })
     }
   },
   methods: {
     value (shares, price) {
-      return helpers.toCurrency(shares * price)
+      // return this.toCurrency(shares * price)
     },
     async refreshTransactions () {
       this.transactions = await api.getTransactions()
