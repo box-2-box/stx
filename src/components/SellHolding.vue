@@ -33,6 +33,28 @@
         type="number" 
         class="form-control">
     </div>
+    <div
+      v-if="sales.length > 0">
+      <h2>Sales History</h2>
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <td scope="col">Date</td>
+            <td scope="col">Shares</td>
+            <td scope="col">Price</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(sale, index) in sales"
+            :key="index">
+            <td>{{ sale.date }}</td>
+            <td>{{ sale.shares }}</td>
+            <td>{{ sale.price }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <button 
       @click.prevent="saveTransaction" 
       class="btn btn-primary btn-lg btn-block">Save</button>
@@ -55,8 +77,10 @@ export default {
         date: '',
         action: 4,
         price: '',
+        shares: 0,
         purchase_id: this.$route.params.id
       },
+      sales: [],
       dataLoaded: false,
       sharesRemaining: 0
     }
@@ -67,8 +91,8 @@ export default {
   async created () {
     let trade = await api.getTransaction(this.id)
     this.transaction.symbol = trade.symbol
-    // TODO: do calculation
-    this.sharesRemaining = this.transaction.shares
+    this.sales = await api.getSales(this.id)
+    this.transaction.shares = this.sharesRemaining = this.getSharesRemaining(trade.shares)
     this.dataLoaded = true
   },
   methods: {
@@ -78,6 +102,10 @@ export default {
     async saveTransaction () {
       await api.createTransaction(this.transaction)
       this.$router.push('/trades')
+    },
+    getSharesRemaining (sharesPurchased) {
+      let sharesSold = this.sales.map(sale => sale.shares)
+      return sharesSold.reduce((total, shares) => total - shares, sharesPurchased)
     }
   }
 }

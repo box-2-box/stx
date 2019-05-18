@@ -35,5 +35,8 @@ export default {
   },
   deleteTransaction (id) {
     return this.execute('delete', `/trades/delete/${id}`)
+  },
+  getSales (id) {
+    return this.execute('get', `/trades/sales/${id}`)
   }
 }

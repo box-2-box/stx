@@ -10,7 +10,7 @@
     </div>
     <div class="form-group">
       <label>Action</label>
-      <select class="form-control" v-model="transaction.action" readonly disabled>
+      <select class="form-control" v-model="transaction.action" disabled>
         <option value="1">Buy</option>
         <option value="2">Dividend</option>
         <option value="3">Reinvest</option>
