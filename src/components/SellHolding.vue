@@ -1,68 +1,73 @@
 <template>
-  <form>
+  <div v-if="dataLoaded">
     <h1>Sell Holding</h1>
-    <div class="form-group">
-      <label>Date</label>
-      <date-picker 
-        v-if="dataLoaded"
-        :date="transaction.date"
-        v-on:update-date="onUpdateDate" />
+    <form v-if="sharesRemaining">
+      <div class="form-group">
+        <label>Date</label>
+        <date-picker
+          :date="transaction.date"
+          v-on:update-date="onUpdateDate" />
+      </div>
+      <div class="form-group">
+        <label>Symbol</label>
+        <input 
+          v-model="transaction.symbol" 
+          type="text" 
+          class="form-control" 
+          readonly>
+      </div>
+      <div class="form-group">
+        <label>Shares</label>
+        <input 
+          v-model="transaction.shares" 
+          type="number" 
+          min="1" 
+          :max="sharesRemaining"
+          class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Price</label>
+        <input 
+          v-model="transaction.price" 
+          type="number" 
+          class="form-control">
+      </div>
+      <div
+        v-if="sales.length > 0">
+        <h2>Sales History</h2>
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <td scope="col">Date</td>
+              <td scope="col">Shares</td>
+              <td scope="col">Price</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(sale, index) in sales"
+              :key="index">
+              <td>{{ sale.date }}</td>
+              <td>{{ sale.shares }}</td>
+              <td>{{ sale.price }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button 
+        @click.prevent="saveTransaction" 
+        class="btn btn-primary btn-lg btn-block">Save</button>
+      <button 
+        class="btn btn-secondary btn-lg btn-block"
+        @click.prevent="$router.push('/trades')">Cancel</button>
+    </form>
+    <div v-else>
+      <p>All shares have been purchased</p>
+      <button 
+          class="btn btn-secondary btn-lg btn-block"
+          @click.prevent="$router.push('/trades')">Cancel</button>
     </div>
-    <div class="form-group">
-      <label>Symbol</label>
-      <input 
-        v-model="transaction.symbol" 
-        type="text" 
-        class="form-control" 
-        readonly>
-    </div>
-    <div class="form-group">
-      <label>Shares</label>
-      <input 
-        v-if="dataLoaded"
-        v-model="transaction.shares" 
-        type="number" 
-        min="1" 
-        :max="sharesRemaining"
-        class="form-control">
-    </div>
-    <div class="form-group">
-      <label>Price</label>
-      <input 
-        v-model="transaction.price" 
-        type="number" 
-        class="form-control">
-    </div>
-    <div
-      v-if="sales.length > 0">
-      <h2>Sales History</h2>
-      <table class="table">
-        <thead class="thead-light">
-          <tr>
-            <td scope="col">Date</td>
-            <td scope="col">Shares</td>
-            <td scope="col">Price</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(sale, index) in sales"
-            :key="index">
-            <td>{{ sale.date }}</td>
-            <td>{{ sale.shares }}</td>
-            <td>{{ sale.price }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <button 
-      @click.prevent="saveTransaction" 
-      class="btn btn-primary btn-lg btn-block">Save</button>
-    <button 
-      class="btn btn-secondary btn-lg btn-block"
-      @click.prevent="$router.push('/trades')"
-    >Cancel</button>
-  </form>
+  </div>
 </template>
 
 <script>
