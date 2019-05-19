@@ -13,7 +13,7 @@
         <input 
           v-model="transaction.symbol" 
           type="text" 
-          class="form-control" 
+          class="form-control text-uppercase" 
           readonly>
       </div>
       <div class="form-group">
