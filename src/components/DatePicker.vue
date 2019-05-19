@@ -221,12 +221,13 @@ export default {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 240px;
+  width: 280px;
 }
 .date-modal-footer {
   padding: 10px 0 0;
   border-top: solid 1px #ddd;
   margin-top: 10px;
+  text-align: center;
 }
 .date-modal-footer a {
   color: #0000dd;

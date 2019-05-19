@@ -20,7 +20,7 @@
       <label>Symbol</label>
       <input 
         v-model="transaction.symbol" 
-        type="text" 
+        type="text"
         class="form-control text-uppercase">
     </div>
     <div class="form-group">
