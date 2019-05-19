@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Transactions from '@/components/Transactions'
-import Transaction from '@/components/Transaction'
+import AddTrade from '@/components/AddTrade'
+import EditTrade from '@/components/EditTrade'
+import SellHolding from '@/components/SellHolding'
 import Auth from '@okta/okta-vue'
 
 // Vue.use(Auth, {
@@ -37,8 +39,7 @@ let router = new Router({
     {
       path: '/trade/add',
       name: 'add',
-      component: Transaction,
-      props: { transactionType: 'add' },
+      component: AddTrade,
       meta: {
         requiresAuth: false
       }
@@ -46,8 +47,7 @@ let router = new Router({
     {
       path: '/trade/edit/:id',
       name: 'edit',
-      component: Transaction,
-      props: { transactionType: 'edit' },
+      component: EditTrade,
       meta: {
         requiresAuth: false
       }
@@ -55,8 +55,7 @@ let router = new Router({
     {
       path: '/trade/sell/:id',
       name: 'sell',
-      component: Transaction,
-      props: { transactionType: 'sell' },
+      component: SellHolding,
       meta: {
         requiresAuth: false
       }
