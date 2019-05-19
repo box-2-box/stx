@@ -68,6 +68,7 @@ export default {
       this.transaction.date = date
     },
     async saveTransaction () {
+      this.transaction.shares_held = this.transaction.shares
       await api.createTransaction(this.transaction)
       this.$router.push('/trades')
     }

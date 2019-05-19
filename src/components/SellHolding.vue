@@ -1,7 +1,7 @@
 <template>
   <div v-if="dataLoaded">
     <h1>Sell Holding</h1>
-    <form v-if="sharesRemaining">
+    <form v-if="holding.shares_held > 0">
       <div class="form-group">
         <label>Date</label>
         <date-picker
@@ -22,7 +22,7 @@
           v-model="transaction.shares" 
           type="number" 
           min="1" 
-          :max="sharesRemaining"
+          :max="transaction.shares"
           class="form-control">
       </div>
       <div class="form-group">
@@ -85,19 +85,19 @@ export default {
         shares: 0,
         purchase_id: this.$route.params.id
       },
+      holding: {},
       sales: [],
-      dataLoaded: false,
-      sharesRemaining: 0
+      dataLoaded: false
     }
   },
   components: {
     'date-picker': DatePicker
   },
   async created () {
-    let trade = await api.getTransaction(this.id)
-    this.transaction.symbol = trade.symbol
+    this.holding = await api.getTransaction(this.id)
+    this.transaction.symbol = this.holding.symbol
+    this.transaction.shares = this.holding.shares_held
     this.sales = await api.getSales(this.id)
-    this.transaction.shares = this.sharesRemaining = this.getSharesRemaining(trade.shares)
     this.dataLoaded = true
   },
   methods: {
@@ -105,12 +105,10 @@ export default {
       this.transaction.date = date
     },
     async saveTransaction () {
+      this.holding.shares_held -= this.transaction.shares
+      await api.updateTransaction(this.id, this.holding)
       await api.createTransaction(this.transaction)
       this.$router.push('/trades')
-    },
-    getSharesRemaining (sharesPurchased) {
-      let sharesSold = this.sales.map(sale => sale.shares)
-      return sharesSold.reduce((total, shares) => total - shares, sharesPurchased)
     }
   }
 }

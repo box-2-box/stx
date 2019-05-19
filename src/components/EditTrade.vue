@@ -57,7 +57,8 @@ export default {
     return {
       id: this.$route.params.id,
       transaction: {},
-      dataLoaded: false
+      dataLoaded: false,
+      currentShareCount: 0
     }
   },
   components: {
@@ -65,6 +66,7 @@ export default {
   },
   async created () {
     this.transaction = await api.getTransaction(this.id)
+    this.currentShareCount = this.transaction.shares
     this.dataLoaded = true
   },
   methods: {
@@ -72,6 +74,8 @@ export default {
       this.transaction.date = date
     },
     async saveTransaction () {
+      // update the number of shares held to reflect changes to number of shares
+      this.transaction.shares_held += this.transaction.shares - this.currentShareCount
       await api.updateTransaction(this.id, this.transaction)
       this.$router.push('/trades')
     }
